@@ -9,7 +9,7 @@ from random import sample
 labels = ['Brown_rust', 'Healthy', 'septoria', 'Yellow_rust']
 
 # Building and splitting the dataset
-def train(labels):
+def split_data(labels):
     method = ['Train','Validate', 'Test']
     for meth in method:
         for label in labels:
