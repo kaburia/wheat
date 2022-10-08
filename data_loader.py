@@ -19,7 +19,7 @@ def train(labels):
                 os.mkdir('Train')
                 if os.path.exists(f'Train/{label}') is False:
                     os.mkdir(f'Train/{label}')
-        else:
+        elif os.path.exists('Train') is True and os.path.exists(f'Train/{label}') is False:
                 os.mkdir(f'Train/{label}')
                 
                 
