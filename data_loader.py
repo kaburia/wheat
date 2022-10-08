@@ -1,6 +1,6 @@
 # split the dataset to train, validate and test 
 # Based on the 4 labels (healthy, septoria, brown_rust, yellow_rust)
-import glob
+
 import shutil
 from os import listdir
 import os
@@ -8,12 +8,12 @@ from random import sample
 
 labels = ['Brown_rust', 'Healthy', 'septoria', 'Yellow_rust']
 
-# Building a training dataset
+# Building and splitting the dataset
 def train(labels):
     method = ['Train','Validate', 'Test']
     for meth in method:
         for label in labels:
-             # creating a training/label folder if they do not exist
+             # creating a  folder if they do not exist
         
             if os.path.exists(f'{meth}') is False:
                 os.mkdir(f'{meth}')
@@ -38,9 +38,3 @@ def train(labels):
                 for file in sample_list:
                     shutil.move(f'{label}/{file}', f'{meth}/{label}') 
             
-train(labels)    
-print(len(listdir('Validate/Brown_rust')))     
-        
-print(len(listdir('Test/Brown_rust')))    
-print(len(listdir('Train/Brown_rust')))    
-print(len(listdir('Brown_rust')))    
