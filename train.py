@@ -81,24 +81,6 @@ def train(img_path, model_name, epochs=1, learning_rate=0.03, device='cpu'):
 
     
 
-def parse_args():
-    parser = argparse.ArgumentParser()
-    # Add arguments for command line
-    args = parser.parse_args()
-
-    return args
-
-
-
-
-def main():
-    args = parse_args()
-
-   
-
-if __name__ == '__main__':
-    main()
-
 
 
 # Set directory to save checkpoints
