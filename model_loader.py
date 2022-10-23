@@ -28,20 +28,20 @@ def modelling(model_name):
 
     if model_name.lower() == 'alexnet':
         model.classifier = nn.Sequential(nn.Linear(9216, 4896),
-                                    nn.ReLU(),
-                                    nn.Dropout(0.3),
-                                    nn.Linear(4896, 2448),
-                                    nn.ReLU(),
-                                    nn.Linear(2448,102),
-                                    nn.LogSoftmax(dim=1))
+                                        nn.ReLU(),
+                                        nn.Dropout(0.3),
+                                        nn.Linear(4896, 2448),
+                                        nn.ReLU(),
+                                        nn.Linear(2448,102),
+                                        nn.LogSoftmax(dim=1))
     elif model_name.lower() == 'densenet':
         model.classifier = nn.Sequential(nn.Linear(1024, 512),
-                                 nn.ReLU(),
-                                 nn.Dropout(0.3),
-                                 nn.Linear(512, 256),
-                                 nn.ReLU(),
-                                 nn.Linear(256,102),
-                                 nn.LogSoftmax(dim=1))
+                                    nn.ReLU(),
+                                    nn.Dropout(0.3),
+                                    nn.Linear(512, 256),
+                                    nn.ReLU(),
+                                    nn.Linear(256,102),
+                                    nn.LogSoftmax(dim=1))
     elif model_name.lower() == 'resnet':
         model.fc = nn.Sequential(nn.Linear(512, 512),
                                  nn.ReLU(),
