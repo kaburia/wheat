@@ -9,39 +9,10 @@ from time import time
 from dataloader import trainloader, val_loader
 
 # Building a model 
-from model_loader import modelling
+from model_loader import modelling, saveModel
 
-# Function to save the model
-def saveModel(model_name):
-    model = modelling(model_name)
-    torch.save(model.state_dict(), f'{model_name}.pth')
-
-
-# Validating the accuracy
-def testAccuracy(validate_path, model_name):
-
-    val_load = val_loader(validate_path)
-    model = modelling(model_name)
-    validation_loss = []
-    
-    model.eval()
-    accuracy = 0.0
-    total = 0.0
-    
-    with torch.no_grad():
-        for images, labels in val_load:
-
-            # run the model on the test set to predict labels
-            outputs = model(images)
-            # the label with the highest energy will be our prediction
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            accuracy += (predicted == labels).sum().item()
-    
-    # compute the accuracy over all test images
-    accuracy = (100 * accuracy / total)
-    return(accuracy)
-
+# Testing the accuracy
+from test import testAccuracy
 
    
 # Train a model

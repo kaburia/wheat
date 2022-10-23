@@ -53,3 +53,13 @@ def modelling(model_name):
 
     return model
 
+# Function to save the model
+def saveModel(model_name):
+    model = modelling(model_name)
+    torch.save(model.state_dict(), f'{model_name}.pth')
+
+# Load the model
+def loadModel(model_name):
+    model = modelling(model_name)
+    checkpoint = torch.load(f'{model_name}.pth', map_location=torch.device('cpu'))
+    model.load_state_dict(checkpoint)
