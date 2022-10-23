@@ -4,12 +4,12 @@ from torchvision import transforms, datasets
 # Loading the split datasets
 # Transforming and augmenting
 def trainloader(trainpath):
-    train_transform = transforms.Compose([transforms.RandomRotation(30),
+    train_transform = transforms.Compose([transforms.RandomRotation(10),
                                               transforms.RandomResizedCrop(224),
                                               transforms.RandomHorizontalFlip(),
                                               transforms.ToTensor(),
-                                              transforms.Normalize([0.485, 0.456, 0.406],
-                                                                    [0.229, 0.224, 0.225])])
+                                              transforms.Normalize([0.485, 0.456, 0.406], # Mean
+                                                                    [0.229, 0.224, 0.225])])# Standard deviation
 
     train_dataset = datasets.ImageFolder(trainpath, transform=train_transform)
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=64, shuffle=True)

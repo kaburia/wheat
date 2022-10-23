@@ -20,7 +20,7 @@ model2 = {'densenet': densenet121,
 
 def modelling(model_name):
     # Use a pretrained model
-    model = model2[model_name]
+    model = model2[model_name.lower()]
     
     # Freeze parameters to avoid backpropagation through them
     for param in model.parameters():
@@ -28,20 +28,20 @@ def modelling(model_name):
 
     if model_name.lower() == 'alexnet':
         model.classifier = nn.Sequential(nn.Linear(9216, 4896),
-                                    nn.ReLU(),
-                                    nn.Dropout(0.3),
-                                    nn.Linear(4896, 2448),
-                                    nn.ReLU(),
-                                    nn.Linear(2448,102),
-                                    nn.LogSoftmax(dim=1))
+                                        nn.ReLU(),
+                                        nn.Dropout(0.3),
+                                        nn.Linear(4896, 2448),
+                                        nn.ReLU(),
+                                        nn.Linear(2448,102),
+                                        nn.LogSoftmax(dim=1))
     elif model_name.lower() == 'densenet':
         model.classifier = nn.Sequential(nn.Linear(1024, 512),
-                                 nn.ReLU(),
-                                 nn.Dropout(0.3),
-                                 nn.Linear(512, 256),
-                                 nn.ReLU(),
-                                 nn.Linear(256,102),
-                                 nn.LogSoftmax(dim=1))
+                                    nn.ReLU(),
+                                    nn.Dropout(0.3),
+                                    nn.Linear(512, 256),
+                                    nn.ReLU(),
+                                    nn.Linear(256,102),
+                                    nn.LogSoftmax(dim=1))
     elif model_name.lower() == 'resnet':
         model.fc = nn.Sequential(nn.Linear(512, 512),
                                  nn.ReLU(),
@@ -53,3 +53,13 @@ def modelling(model_name):
 
     return model
 
+# Function to save the model
+def saveModel(model_name):
+    model = modelling(model_name)
+    torch.save(model.state_dict(), f'{model_name}.pth')
+
+# Load the model
+def loadModel(model_name):
+    model = modelling(model_name)
+    checkpoint = torch.load(f'{model_name}.pth', map_location=torch.device('cpu'))
+    model.load_state_dict(checkpoint)
