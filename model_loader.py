@@ -56,10 +56,12 @@ def modelling(model_name):
 # Function to save the model
 def saveModel(model_name):
     model = modelling(model_name)
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model.to(device)
     torch.save(model.state_dict(), f'{model_name}.pth')
 
 # Load the model
 def loadModel(model_name):
     model = modelling(model_name)
     checkpoint = torch.load(f'{model_name}.pth', map_location=torch.device('cpu'))
-    model.load_state_dict(checkpoint)
+    return model.load_state_dict(checkpoint)

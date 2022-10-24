@@ -1,6 +1,7 @@
-# Testing the trained model
-# import the saved model
 import torch
+import os
+from torch import nn
+
 # Loading the data
 from dataloader import  val_loader
 
@@ -11,25 +12,34 @@ from model_loader import modelling, loadModel
 def testAccuracy(validate_path, model_name):
 
     val_load = val_loader(validate_path)
-    model = modelling(model_name)
-    validation_loss = []
-    
-    model.eval()
+    validation_loss = 0
+    criterion = nn.NLLLoss()
+
+    if os.path.exists(f'{model_name}.pth'):
+      model = loadModel(model_name)
+    else:
+      model = modelling(model_name)
+
     accuracy = 0.0
-    total = 0.0
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model.to(device)
     
     with torch.no_grad():
-        for images, labels in val_load:
+            model.eval()
+            for images, labels in val_load:
+                images, labels = images.to(device), labels.to(device)
+                log_ps = model.forward(images)
+                validation_loss += criterion(log_ps, labels)
+                
+                ps = torch.exp(log_ps)
+                top_p, top_class = ps.topk(1, dim=1)
+                equals = top_class == labels.view(*top_class.shape)
+                accuracy += torch.mean(equals.type(torch.FloatTensor))
 
-            # run the model on the test set to predict labels
-            outputs = model(images)
-            # the label with the highest energy will be our prediction
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            accuracy += (predicted == labels).sum().item()
     
     # compute the accuracy over all test images
-    accuracy = (accuracy / total)
-    return(accuracy)
+    accuracy = (accuracy / len(val_load))
+    val_loss = validation_loss / len(val_load)
+    return accuracy, val_loss
 
 

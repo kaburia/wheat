@@ -4,7 +4,11 @@ from PIL import Image
 import numpy as np
 
 from dataloader import transforming
+from model_loader import loadModel, modelling
 # Visualizing the data
+
+resnet = loadModel('densenet')
+print(resnet)
 
 def process_image(image):
     ''' Scales, crops, and normalizes a PIL image for a PyTorch model,
@@ -40,9 +44,8 @@ def imshow(image, ax=None, title=None):
 ''' 
 Predict the class (or classes) of an image using a trained deep learning model.
 '''
-def predict(image_path, model, topk=5):
-    
-  
+def predict(image_path, model, topk=3):
+      
     image = process_image(image_path).unsqueeze(dim=0)
 
     with torch.no_grad():
@@ -50,37 +53,21 @@ def predict(image_path, model, topk=5):
       output = model.forward(image)
 
     ps = torch.exp(output)
-    # label = labels.cpu()
     ps, classes = ps.topk(topk, dim=1)
-    # equals = classes == label.view(*top_class.shape)
     return ps, classes
 
 
 
-def view(image_path, model, topk=5):
+def view(image_path, model):
     
     probs, classes = predict(image_path, model) 
     image = process_image(image_path) 
       
-    # if 0 not in classes.numpy()[0]:
-    #       clas_im = [cat_to_name[str(top_class)] for top_class in classes.numpy()[0]]
-    # else:
-    #   pass
-    clas_im = [[str(top_class)] for top_class in classes.numpy()[0]]
+    clas_im = [str(top_class) for top_class in classes.numpy()[0]]
     prbs = [pr for pr in probs.numpy()[0]]
     x = plt.barh(clas_im, prbs, color='purple')
     image = imshow(image)
     return plt.show()
 
 
-# Before processing
-def visual_before(image):
-    pass
-
-# After processing
-def visual_after(image):
-    pass
-
-# Sanity checking and probabilities
-def sanity_check(image, topk):
-    pass
+view('Train\Brown_rust\Brown_rust002.jpg', resnet)
